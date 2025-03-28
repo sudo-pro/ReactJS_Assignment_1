@@ -14,6 +14,13 @@ export default () => {
     state.employees.find((emp) => emp.id == id),
   );
 
+  useEffect(() => {
+    if (!employee) {
+      alert("Employee not found!");
+      navigate("/list");
+    }
+  }, [employee, navigate]);
+
   const [formData, setFormData] = useState(employee || {
     fullName: "",
     birthdate: "",

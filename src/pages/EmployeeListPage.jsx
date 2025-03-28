@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { deleteEmployee } from "../redux/employeesSlice";
 import Layout from "../components/Layout";
 import { useNavigate } from "react-router-dom";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 export default () => {
   const employees = useSelector((state) => state.employees);
@@ -13,16 +14,24 @@ export default () => {
   const [searchBy, setSearchBy] = useState("name");
   const [sortBy, setSortBy] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
+  const [openConfirmation, setOpenConfirmation] = useState(null);
 
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this employee?")) {
-      dispatch(deleteEmployee(id));
+  const closeConfirmation = () => {
+    setOpenConfirmation(null);
+  };
+  const confirmDelete = () => {
+    if (openConfirmation) {
+      dispatch(deleteEmployee(openConfirmation));
     }
+    setOpenConfirmation(null);
+  };
+  const handleDelete = (id) => {
+    setOpenConfirmation(id);
   };
 
   const handleEdit = (id) => {
     navigate(`/edit/${id}`);
-  }
+  };
 
   // Filter employees based on search term
   const filteredEmployees = useMemo(() => {
@@ -110,16 +119,16 @@ export default () => {
           </p>
         ) : (
           <ul>
-              <table className="min-w-full table-auto mt-5 border-collapse">
-                <thead className="font-bold text-md text-left">
-                  <tr>
-                    <th className="px-4 py-2">Name</th>
-                    <th className="px-4 py-2">Department</th>
-                    <th className="px-4 py-2">Experience (Years)</th>
-                    <th className="px-4 py-2">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
+            <table className="min-w-full table-auto mt-5 border-collapse">
+              <thead className="font-bold text-md text-left">
+                <tr className="border">
+                  <th className="px-4 py-2">Name</th>
+                  <th className="px-4 py-2">Department</th>
+                  <th className="px-4 py-2">Experience (Years)</th>
+                  <th className="px-4 py-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
                 {sortedEmployees.map((employee) => (
                   <tr key={employee.id} className="border">
                     <td className="px-4 py-2">{employee.fullName}</td>
@@ -141,11 +150,17 @@ export default () => {
                     </td>
                   </tr>
                 ))}
-                </tbody>
-              </table>
+              </tbody>
+            </table>
           </ul>
         )}
       </div>
+
+      <ConfirmationModal
+        isOpen={openConfirmation}
+        onConfirm={confirmDelete}
+        onClose={closeConfirmation}
+      />
     </Layout>
   );
 };

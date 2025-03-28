@@ -1,4 +1,3 @@
-// src/features/employeesSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 
 const employeesSlice = createSlice({
@@ -24,17 +23,18 @@ const employeesSlice = createSlice({
       state.push(action.payload);
     },
     editEmployee: (state, action) => {
-      const index = state.findIndex((emp) => emp.id === action.payload.id);
-      if (index !== -1) {
+      const index = state.findIndex((emp) => emp.id == action.payload.id);
+      if (index != -1) {
         state[index] = action.payload;
       }
     },
     deleteEmployee: (state, action) => {
-      return state.filter((emp) => emp.id !== action.payload);
+      return state.filter((emp) => emp.id != action.payload);
     },
   },
 });
 
 export const { addEmployee, editEmployee, deleteEmployee } =
   employeesSlice.actions;
+  
 export default employeesSlice.reducer;

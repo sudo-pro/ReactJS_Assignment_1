@@ -1,9 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AddEmployee from "../pages/AddEmployeePage";
-import EditEmployee from "../pages/EditEmployeePage";
-import EmployeeList from "../pages/EmployeeListPage";
-import HomePage from "../pages/HomePage";
+
+import HomePage from "./pages/HomePage";
+import PageError from "./pages/PageNotFound";
+import AddEmployee from "./pages/AddEmployeePage";
+import EditEmployee from "./pages/EditEmployeePage";
+import EmployeeList from "./pages/EmployeeListPage";
 
 export default () => {
   return (
@@ -13,6 +15,7 @@ export default () => {
         <Route path="/add" element={<AddEmployee />} />
         <Route path="/list" element={<EmployeeList />} />
         <Route path="/edit/:id" element={<EditEmployee />} />
+        <Route path="*" element={<PageError />} />
       </Routes>
     </Router>
   );
